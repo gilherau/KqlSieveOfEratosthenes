@@ -63,6 +63,6 @@ range num from 3 to n step 2 // Build the final list of integers. Note we are st
     summarize Dividers=countif(num % dividers == 0 and num != dividers) // using the mv-apply trick to find the primes
 )
 | where Dividers == 0 //keeping only the primes
-| union (datatable(num:long) [2]) // adding the special case of 2 back in the test
+| union (datatable(num:long) [2]) // adding the special case of 2 back in the dataset
 | count //final count
 ``` 
