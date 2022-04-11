@@ -5,11 +5,11 @@ This is my response to a fun challenge for a KQL version of the Sieve of Eratost
 
 >Want to play with #BigData platform that powers #Microsoft, and win quality time with the team who built it? How about a small fun contest then: how efficient can you count prime numbers with #KQL? The winner gets to meet #Kusto engineering team online and for a Q&A session!
 
-To get you started, here is a small query that works in somewhat naïve way. Can you improve it and make it run faster? Once you’re happy with the result: find out how many prime numbers are there under 1,000,000?
+>To get you started, here is a small query that works in somewhat naïve way. Can you improve it and make it run faster? Once you’re happy with the result: find out how many prime numbers are there under 1,000,000?
 
-If you don’t have your own #Kusto/#ADX cluster already - you can get it #free here: https://aka.ms/kustofree
+>If you don’t have your own #Kusto/#ADX cluster already - you can get it #free here: https://aka.ms/kustofree
 
-[Initial challenge](https://www.linkedin.com/posts/sloutsky_azure-data-explorer-activity-6914950553500291072-iQuu?utm_source=linkedin_share&utm_medium=member_desktop_web) by Alexander Sloutsky
+[link to initial challenge](https://www.linkedin.com/posts/sloutsky_azure-data-explorer-activity-6914950553500291072-iQuu?utm_source=linkedin_share&utm_medium=member_desktop_web) by Alexander Sloutsky
 ``` kusto
 range num from 3 to 50000 step 1 
 | where num % 2 != 0 // skip even numbers
