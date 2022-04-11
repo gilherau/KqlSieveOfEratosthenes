@@ -15,29 +15,36 @@ range num from 3 to 50000 step 1
 | count
 ``` 
 
-Here is my approach. I am clocking in 20 sec on a dev sku cluster (have not spun up my free cluster yet :( )
+Here is my approach. I am clocking in 12 sec on a dev sku cluster (have not spun up my free cluster yet :( )
 
 ``` kusto
-// Added the Sieve of Eratosthenes optimization to the script to minimize the list of dividers
 // Added the Sieve of Eratosthenes optimization to the script to minimize the list of dividers
 let n = int(1000000);
 let rootOfn = toint(sqrt(n)); // Need the root of "n" to know when to stop counting prime dividers
 let Optimize = range i from 2 to rootOfn step 1; // Building a separate range that stops using the variable above
-let OptimizerArray = // this will build an array that contains the optimized list of primes we can divide by. We're casting it as a scalar to use it later in our script 
+let RawOptimizerArray = // this will build an array that contains a contrained list of integers that we must indentify as primes we can divide by. We're casting it as a scalar to use it later in our script 
         toscalar (
                     Optimize
-                    | where (i == 3  or i % 3  != 0) // The following where clauses removes the usual suspects from our list
-                        and (i == 5  or i % 5  != 0)
-                        and (i == 7  or i % 7  != 0)
                     | summarize make_set(toint(i)) // We finish off by summarizing and creating a bag
                  );
-range num from 3 to n step 1 // 
-| extend dividers = OptimizerArray
+let OptimizerSet = // Now we will use the MV-apply trick to remove the non-primes and create an array of primes up to RootOfP
+    toscalar (
+                Optimize
+                | extend dividers = RawOptimizerArray
+                | mv-apply dividers to typeof(long) on
+                    (
+                        summarize Dividers=countif(i % dividers == 0 and i != dividers)
+                    )
+                | where Dividers == 0
+                | summarize make_set(i) 
+             );
+range num from 3 to n step 1 // Build the final list
+| extend dividers = OptimizerSet //grabbing our optimizer set from before
 | mv-apply dividers to typeof(long) on
 (
-    summarize Dividers=countif(num % dividers == 0 and num != dividers)
+    summarize Dividers=countif(num % dividers == 0 and num != dividers) // using the mv-apply trick to find the primes
 )
-| where Dividers == 0
-| union (print num=2) // '2' is prime number too!
-| count
+| where Dividers == 0 //keeping only the results we want
+| union (print num=2) // adding the 2 back in
+| count //final count
 ``` 
