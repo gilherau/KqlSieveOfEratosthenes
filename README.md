@@ -15,7 +15,7 @@ range num from 3 to 50000 step 1
 | count
 ``` 
 
-Here is my approach. I am clocking in 4.22 sec on a dev sku cluster (have not spun up my free cluster yet :( )
+Here is my approach. I am clocking in 20 sec on a dev sku cluster (have not spun up my free cluster yet :( )
 
 ``` kusto
 // Added the Sieve of Eratosthenes optimization to the script to minimize the list of dividers
