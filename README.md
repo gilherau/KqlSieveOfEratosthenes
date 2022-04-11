@@ -23,7 +23,7 @@ range num from 3 to 50000 step 1
 | count
 ``` 
 ## My approach
-I am clocking in 12 sec on a dev sku cluster (have not spun up my free cluster yet :( )
+I am clocking in 6 sec on a dev sku cluster (have not spun up my free cluster yet :( )
 
 ### todos:
 - Hygiene with data types to accomodate bigger numbers :) (done)
