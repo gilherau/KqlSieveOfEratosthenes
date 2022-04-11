@@ -20,16 +20,19 @@ range num from 3 to 50000 step 1
 I am clocking in 12 sec on a dev sku cluster (have not spun up my free cluster yet :( )
 
 ### todos:
-- Hygiene with data types to accomodate bigger numbers :)
-- Generalize some of the code to be functions if possible
+- Hygiene with data types to accomodate bigger numbers :) (done)
+- Generalize some of the code to be functions if possible (done)
+- Pre-hydrate list of prime dynamically as parameters
 
 
 ``` kusto
 // Added the Sieve of Eratosthenes optimization to the script to minimize the list of dividers
-let n = int(1000000);
-let rootOfn = toint(sqrt(n)); // Need the root of "n" to know when to stop counting prime dividers
-let Optimize = range i from 2 to rootOfn step 1; // Building a separate range that stops using the variable above
-let RawOptimizerArray = // this will build an array that contains a contrained list of integers that we must indentify as primes we can divide by. We're casting it as a scalar to use it later in our script 
+let n = long(1000000); //setting the number from which we are counting down the prime from as variable "n"
+//Begin OptimizeSieve(n) function to return an optimized list of dividers to cut down on running time.
+let OptimizeSieve = (n: long) 
+{ 
+let Optimize = range i from 2 to sqrt(n) step 1; // Building a range of integers that stops at "rootOfN"
+let RawOptimizerArray = // this will build an scalar array that contains a contrained list of integers that we must indentify as primes we can divide by. We're casting it as a scalar to use it later in our script 
         toscalar (
                     Optimize
                     | summarize make_set(toint(i)) // We finish off by summarizing and creating a bag
@@ -45,12 +48,15 @@ let OptimizerSet = // Now we will use the MV-apply trick to remove the non-prime
                 | where Dividers == 0 // keeping only the primes
                 | summarize make_set(i) //making an array out of our results
              );
-range num from 2 to n step 1 // Build the final list of integers.
-| extend dividers = OptimizerSet //grabbing our optimizer set from before
+OptimizerSet             
+}; 
+range num from 3 to n step 2 // Build the final list of integers. Note we are starting from an odd number and using a step value of 2 which lets us skip all even numbers past the number 2 which we artificially re-inject later for an accurate count 
+| extend dividers = OptimizeSieve(n) // invoking the function that returns the optimized list of dividers
 | mv-apply dividers to typeof(long) on
 (
     summarize Dividers=countif(num % dividers == 0 and num != dividers) // using the mv-apply trick to find the primes
 )
 | where Dividers == 0 //keeping only the primes
+| union (datatable(num:long) [2]) // adding the special case of 2 back in the test
 | count //final count
 ``` 
