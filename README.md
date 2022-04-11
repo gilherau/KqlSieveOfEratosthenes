@@ -1,5 +1,5 @@
-# KqlSieveOfEratosthenes
-a fun challenge for a KQL version of the Sieve of Eratosthenes
+# Counting primes in KQL
+This is my response to a fun challenge for a KQL version of the Sieve of Eratosthenes. Challenge accepted!
 
 [Original post](https://www.linkedin.com/posts/sloutsky_azure-data-explorer-activity-6914950553500291072-iQuu?utm_source=linkedin_share&utm_medium=member_desktop_web) by Alexander Sloutsky
 ``` kusto
