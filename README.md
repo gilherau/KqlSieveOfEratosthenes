@@ -28,23 +28,22 @@ let RawOptimizerArray = // this will build an array that contains a contrained l
                     | summarize make_set(toint(i)) // We finish off by summarizing and creating a bag
                  );
 let OptimizerSet = // Now we will use the MV-apply trick to remove the non-primes and create an array of primes up to RootOfN
-    toscalar (
+    toscalar ( // using toscalar to convert our final array resultset to a scalar value for later use
                 Optimize
-                | extend dividers = RawOptimizerArray
-                | mv-apply dividers to typeof(long) on
+                | extend dividers = RawOptimizerArray // grabbing our list of integers of interest
+                | mv-apply dividers to typeof(long) on 
                     (
-                        summarize Dividers=countif(i % dividers == 0 and i != dividers)
+                        summarize Dividers=countif(i % dividers == 0 and i != dividers) // using the mv-apply trick to find the primes within that constrained list
                     )
-                | where Dividers == 0
-                | summarize make_set(i) 
+                | where Dividers == 0 // keeping only the primes
+                | summarize make_set(i) //making an array out of our results
              );
-range num from 3 to n step 1 // Build the final list
+range num from 2 to n step 1 // Build the final list of integers.
 | extend dividers = OptimizerSet //grabbing our optimizer set from before
 | mv-apply dividers to typeof(long) on
 (
     summarize Dividers=countif(num % dividers == 0 and num != dividers) // using the mv-apply trick to find the primes
 )
-| where Dividers == 0 //keeping only the results we want
-| union (print num=2) // adding the 2 back in
+| where Dividers == 0 //keeping only the primes
 | count //final count
 ``` 
