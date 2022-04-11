@@ -19,6 +19,7 @@ Here is my approach. I am clocking in 4.22 sec on a dev sku cluster (have not sp
 
 ``` kusto
 // Added the Sieve of Eratosthenes optimization to the script to minimize the list of dividers
+// Added the Sieve of Eratosthenes optimization to the script to minimize the list of dividers
 let n = int(1000000);
 let rootOfn = toint(sqrt(n)); // Need the root of "n" to know when to stop counting prime dividers
 let Optimize = range i from 2 to rootOfn step 1; // Building a separate range that stops using the variable above
@@ -31,12 +32,6 @@ let OptimizerArray = // this will build an array that contains the optimized lis
                     | summarize make_set(toint(i)) // We finish off by summarizing and creating a bag
                  );
 range num from 3 to n step 1 // 
-| where     num % 2 != 0  // pruning the list starting with 2 and stoping when perf does not gain any more 
-        and num % 3 != 0
-        and num % 5 != 0
-        and num % 7 != 0
-        and num % 9 != 0
-        and num % 11 != 0 // Negligable return on perf past that point
 | extend dividers = OptimizerArray
 | mv-apply dividers to typeof(long) on
 (
