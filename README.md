@@ -1,7 +1,9 @@
 # Counting primes in KQL
 This is my response to a fun challenge for a KQL version of the Sieve of Eratosthenes. Challenge accepted!
 
-[Original post](https://www.linkedin.com/posts/sloutsky_azure-data-explorer-activity-6914950553500291072-iQuu?utm_source=linkedin_share&utm_medium=member_desktop_web) by Alexander Sloutsky
+## Original post
+
+[Initial challenge](https://www.linkedin.com/posts/sloutsky_azure-data-explorer-activity-6914950553500291072-iQuu?utm_source=linkedin_share&utm_medium=member_desktop_web) by Alexander Sloutsky
 ``` kusto
 range num from 3 to 50000 step 1 
 | where num % 2 != 0 // skip even numbers
@@ -14,8 +16,13 @@ range num from 3 to 50000 step 1
 | union (print num=2) // '2' is prime number too!
 | count
 ``` 
+## My approach
+I am clocking in 12 sec on a dev sku cluster (have not spun up my free cluster yet :( )
 
-Here is my approach. I am clocking in 12 sec on a dev sku cluster (have not spun up my free cluster yet :( )
+###todos:
+- Hygiene with data types to accomodate bigger numbers :)
+- Generalize some of the code to be functions if possible
+
 
 ``` kusto
 // Added the Sieve of Eratosthenes optimization to the script to minimize the list of dividers
