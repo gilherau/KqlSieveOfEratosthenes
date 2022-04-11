@@ -27,7 +27,7 @@ let RawOptimizerArray = // this will build an array that contains a contrained l
                     Optimize
                     | summarize make_set(toint(i)) // We finish off by summarizing and creating a bag
                  );
-let OptimizerSet = // Now we will use the MV-apply trick to remove the non-primes and create an array of primes up to RootOfP
+let OptimizerSet = // Now we will use the MV-apply trick to remove the non-primes and create an array of primes up to RootOfN
     toscalar (
                 Optimize
                 | extend dividers = RawOptimizerArray
