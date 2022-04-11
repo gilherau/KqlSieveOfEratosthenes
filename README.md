@@ -1,5 +1,6 @@
 # Counting primes in KQL
-This is my response to a fun challenge for a KQL version of the Sieve of Eratosthenes. Challenge accepted!
+
+Counting primes in a new language you may not be familiar with is always fun and a great learning experience. I encourage you to read the original challenge from Alexander (See below) and try it yourself before you look at the solution I came up with. 
 
 ## Original post
 
