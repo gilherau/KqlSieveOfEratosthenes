@@ -19,7 +19,7 @@ range num from 3 to 50000 step 1
 ## My approach
 I am clocking in 12 sec on a dev sku cluster (have not spun up my free cluster yet :( )
 
-###todos:
+### todos:
 - Hygiene with data types to accomodate bigger numbers :)
 - Generalize some of the code to be functions if possible
 
